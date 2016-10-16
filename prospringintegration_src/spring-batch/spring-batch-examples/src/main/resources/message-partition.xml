@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2002-2011 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/integration
+		http://www.springframework.org/schema/integration/spring-integration-2.0.xsd">
+
+  <context:property-placeholder location="batch.properties"/>
+  <context:component-scan
+      base-package="com.apress.prospringintegration.springbatch.partition"/>
+
+  <batch:job id="importData" job-repository="jobRepository">
+    <batch:step id="step1-master">
+      <batch:partition step="step1" handler="partitionHandler" partitioner="partitioner"/>
+    </batch:step>
+  </batch:job>
+
+  <batch:step id="step1">
+    <batch:tasklet>
+      <batch:chunk reader="dataReader"
+                   processor="userRegistrationValidationProcessor"
+                   writer="dataWriter"
+                   commit-interval="5"/>
+    </batch:tasklet>
+  </batch:step>
+
+  <int:channel id="launchChannel"/>
+
+  <int:channel id="statusChannel">
+    <int:queue capacity="10"/>
+  </int:channel>
+
+  <int:service-activator input-channel="launchChannel"
+                         output-channel="statusChannel"
+                         ref="jobMessageHandler"/>
+
+  <int:channel id="requestChannel">
+    <int:queue capacity="10"/>
+  </int:channel>
+
+  <int:channel id="staging">
+    <int:queue capacity="10"/>
+  </int:channel>
+
+  <int:channel id="replyChannel">
+    <int:queue capacity="10"/>
+  </int:channel>
+
+  <int:service-activator ref="stepExecutionRequestHandler"
+                         input-channel="requestChannel"
+                         output-channel="staging">
+    <int:poller>
+      <int:interval-trigger interval="10"/>
+    </int:poller>
+  </int:service-activator>
+
+  <int:aggregator ref="partitionHandler"
+                  input-channel="staging"
+                  output-channel="replyChannel">
+    <int:poller>
+      <int:interval-trigger interval="10"/>
+    </int:poller>
+  </int:aggregator>
+
+</beans>

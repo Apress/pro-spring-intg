@@ -1,0 +1,8 @@
+http\://www.apress.com/schema/integration/file/apress-integration-file-1.0.xsd=com/apress/prospringintegration/customadapters/inbound/eventdriven/config/apress-integration-file-1.0.xsd
+http\://www.apress.com/schema/integration/file/apress-integration-file.xsd=com/apress/prospringintegration/customadapters/inbound/eventdriven/config/apress-integration-file-1.0.xsd
+http\://www.apress.com/schema/integration/stock/apress-integration-stock-1.0.xsd=com/apress/prospringintegration/customadapters/inbound/pollerdriven/config/apress-integration-stock-1.0.xsd
+http\://www.apress.com/schema/integration/stock/apress-integration-stock.xsd=com/apress/prospringintegration/customadapters/inbound/pollerdriven/config/apress-integration-stock-1.0.xsd
+http\://www.apress.com/schema/integration/shell/apress-integration-shell.xsd=com/apress/prospringintegration/customadapters/outbound/config/apress-integration-shell-1.0.xsd
+http\://www.apress.com/schema/integration/shell/apress-integration-shell-1.0.xsd=com/apress/prospringintegration/customadapters/outbound/config/apress-integration-shell-1.0.xsd
+
+

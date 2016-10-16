@@ -1,0 +1,3 @@
+http\://www.apress.com/schema/integration/file=com.apress.prospringintegration.customadapters.inbound.eventdriven.config.DirectoryMonitorNamespaceHandler
+http\://www.apress.com/schema/integration/stock=com.apress.prospringintegration.customadapters.inbound.pollerdriven.config.StockNamespaceHandler
+http\://www.apress.com/schema/integration/shell=com.apress.prospringintegration.customadapters.outbound.config.ShellMessagingNamespaceHandler

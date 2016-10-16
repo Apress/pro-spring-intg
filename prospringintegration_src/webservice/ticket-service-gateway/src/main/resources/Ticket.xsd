@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+  ~ Copyright 2002-2011 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<xs:schema version="1.0"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           targetNamespace="http://prospringintegration.com/tk/schemas"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="TicketRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="description"/>
+        <xs:element type="priorityType" name="priority"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="TicketResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="ticketType" name="ticket"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="ticketType">
+    <xs:sequence>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="issueDateTime" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="priority" type="priorityType" minOccurs="0"/>
+      <xs:element name="ticketId" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="priorityType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="low"/>
+      <xs:enumeration value="medium"/>
+      <xs:enumeration value="high"/>
+      <xs:enumeration value="emergency"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
+

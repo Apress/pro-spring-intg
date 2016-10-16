@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.apress.prospringintegration</groupId>
+    <artifactId>core</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>endpoints-adapters</artifactId>
+  <packaging>pom</packaging>
+  <name>endpoints-adapters</name>
+
+  <modules>
+    <module>message-endpoints-examples</module>
+    <module>channel-adapters-examples</module>
+    <module>service-activator-examples</module>
+    <module>gateway-examples</module>
+    <module>jmsgateway-examples</module>
+    <module>secure-channel-example</module>
+  </modules>
+  
+</project>

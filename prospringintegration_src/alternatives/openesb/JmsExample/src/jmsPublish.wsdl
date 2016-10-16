@@ -1,0 +1,41 @@
+<definitions name="jmsPublish" targetNamespace="http://j2ee.netbeans.org/wsdl/JmsExample/jmsPublish"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:jms="http://schemas.sun.com/jbi/wsdl-extensions/jms/"
+             xmlns:tns="http://j2ee.netbeans.org/wsdl/JmsExample/jmsPublish"
+             xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype">
+  <types/>
+  <message name="JMSInputMessage">
+    <part name="part1" type="xsd:string"/>
+  </message>
+  <portType name="JMSOutPortType">
+    <operation name="JMSOutOperation">
+      <input name="input1" message="tns:JMSInputMessage"/>
+    </operation>
+  </portType>
+  <binding name="JMSOutBinding" type="tns:JMSOutPortType">
+    <jms:binding/>
+    <operation name="JMSOutOperation">
+      <jms:operation destination="DefaultQueue" destinationType="Queue" transaction="NoTransaction"
+                     deliveryMode="PERSISTENT" priority="4" timeout="300000"/>
+      <input name="input1">
+        <jms:message messageType="TextMessage" textPart="part1"/>
+      </input>
+    </operation>
+  </binding>
+  <service name="JMSOutService">
+    <port name="jmsPublish_OutPort" binding="tns:JMSOutBinding">
+      <jms:address connectionURL="mq://localhost:7676" username="guest" password="guest">
+        <jms:jmsjcaOptions><![CDATA[]]></jms:jmsjcaOptions>
+      </jms:address>
+    </port>
+  </service>
+  <plnk:partnerLinkType name="jmsPublish">
+    <!-- A partner link type is automatically generated when a new port type is added. Partner link types are used by BPEL processes.
+In a BPEL process, a partner link represents the interaction between the BPEL process and a partner service. Each partner link is associated with a partner link type.
+A partner link type characterizes the conversational relationship between two services. The partner link type can have one or two roles.-->
+    <plnk:role name="JMSOutPortTypeRole" portType="tns:JMSOutPortType"/>
+  </plnk:partnerLinkType>
+</definitions>
+

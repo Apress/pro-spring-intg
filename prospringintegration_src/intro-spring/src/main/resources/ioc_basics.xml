@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2002-2011 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+  <!-- Example 3-1 -->
+  <bean class="com.apress.prospringintegration.corespring.iocbasics.BasicPOJO"/>
+  <bean id="basic-pojo"
+        class="com.apress.prospringintegration.corespring.iocbasics.BasicPOJO"/>
+
+  <!-- Constructs using the parameterized construction -->
+  <bean id="constructor-setup"
+        class="com.apress.prospringintegration.corespring.iocbasics.BasicPOJO">
+    <constructor-arg name="name" value="red"/>
+    <constructor-arg name="color" value="violet"/>
+  </bean>
+
+  <!-- Constructs using no-arg constructor, then sets properties with setters-->
+  <bean id="no-args"
+        class="com.apress.prospringintegration.corespring.iocbasics.BasicPOJO">
+    <property name="color" ref="defaultColor"/>
+    <property name="name" value="Mario"/>
+  </bean>
+
+
+  <bean id="defaultColor"
+        class="com.apress.prospringintegration.corespring.iocbasics.ColorEnum"
+        factory-method="valueOf">
+    <constructor-arg value="blue"/>
+  </bean>
+
+  <!-- Factory bean for colors -->
+  <bean id="colorRandomizer"
+        class="com.apress.prospringintegration.corespring.iocbasics.ColorRandomizer"
+        primary="true"/>
+
+
+  <!-- gets a random color -->
+  <bean id="randomColor" factory-bean="colorRandomizer" factory-method="randomColor"/>
+
+  <!-- gets any color, except the random color defined above -->
+  <bean id="exclusiveColor" factory-bean="colorRandomizer" factory-method="exceptColor">
+    <constructor-arg ref="randomColor"/>
+  </bean>
+
+
+  <!-- Autowiring portion -->
+
+  <!-- autowiring by name -->
+  <bean id="autowire-named"
+        class="com.apress.prospringintegration.corespring.iocbasics.BasicPOJO"
+        autowire="byName"/>
+
+
+  <!-- autowires to color property on demo bean -->
+  <bean id="color" factory-bean="colorRandomizer" factory-method="randomColor"/>
+
+
+  <!-- Autowiring by type -->
+  <bean id="colorPicker"
+        class="com.apress.prospringintegration.corespring.iocbasics.ColorPicker"
+        autowire="byType"/>
+
+
+  <!-- the 'primary' bean for colorenum in this context used in byType autowiring as default -->
+  <bean id="primaryColor" factory-bean="colorRandomizer" factory-method="randomColor" primary="true"/>
+
+
+  <!-- Scope Demonstartion -->
+
+  <bean id="randomeverytime" factory-bean="colorRandomizer" factory-method="randomColor" scope="prototype"/>
+  <bean id="alwaysthesame" factory-bean="colorRandomizer" factory-method="randomColor" scope="singleton"/>
+
+  <bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+    <property name="scopes">
+      <map>
+        <entry key="thread">
+          <bean class="org.springframework.context.support.SimpleThreadScope"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <bean id="threadColor" factory-bean="colorRandomizer" factory-method="randomColor" scope="thread"/>
+
+  <bean id="loggingColors" class="com.apress.prospringintegration.corespring.iocbasics.LoggingColorRandomizer"
+        destroy-method="complete" init-method="init">
+    <property name="logFile" value="colorLog"/>
+  </bean>
+
+</beans>
